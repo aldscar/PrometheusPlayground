@@ -1,0 +1,71 @@
+version: '3.4'
+
+services:
+  prometheus:
+    image: ${DOCKER_REGISTRY-}prometheus
+    container_name: prometheus
+    build:
+      context: ./Prometheus     
+    ports:
+      - "9090:9090" 
+ 
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    ports:
+      - "3000:3000" 
+    volumes:
+      - "./Grafana/data:/var/lib/grafana"
+
+  requestloader:
+    image: ${DOCKER_REGISTRY-}requestloader
+    container_name: RequestLoader
+    build:
+      context: ./RequestLoader
+    environment:
+       - "url=http://measuredwebapplication/weatherforecast"
+
+  measuredwebapplication:
+    image: ${DOCKER_REGISTRY-}measuredwebapplication
+    container_name: MeasuredWebApplication
+    build:
+      context: .
+      dockerfile: MeasuredWebApplication/Dockerfile
+    ports:
+      - "8080:80"
+  
+  measuredhostedservice-A:
+    image: ${DOCKER_REGISTRY-}measuredhostedservice
+    container_name: MeasuredHostedService-A
+    build:
+      context: .
+      dockerfile: MeasuredHostedService/Dockerfile
+    ports:
+      - "8081:80"
+
+  measuredhostedservice-B:
+    image: ${DOCKER_REGISTRY-}measuredhostedservice
+    container_name: MeasuredHostedService-B
+    build:
+      context: .
+      dockerfile: MeasuredHostedService/Dockerfile
+    ports:
+      - "8082:80"
+
+  measuredhostedservice-C:
+    image: ${DOCKER_REGISTRY-}measuredhostedservice
+    container_name: MeasuredHostedService-C
+    build:
+      context: .
+      dockerfile: MeasuredHostedService/Dockerfile
+    ports:
+      - "8083:80"
+
+  statisticshostedservice:
+    image: ${DOCKER_REGISTRY-}statisticshostedservice
+    container_name: StatisticsHostedService-B
+    build:
+      context: .
+      dockerfile: StatisticsHostedService/Dockerfile
+    ports:
+      - "8084:80"

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "StatisticsHostedService": {
+      "commandName": "Project"
+    },
+    "Docker (1)": {
+      "commandName": "Docker"
+    }
+  }
+}
