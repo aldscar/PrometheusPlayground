@@ -2,6 +2,12 @@
 
 namespace SharedClasses
 {
+    /// <summary>
+    /// Randomly generates health status:
+    /// 75% healty,
+    /// 20% degraded,
+    ///  5% unhealty
+    /// </summary>
     public class SampleHealthCheck : IHealthCheck
     {
         public Task<HealthCheckResult> CheckHealthAsync(

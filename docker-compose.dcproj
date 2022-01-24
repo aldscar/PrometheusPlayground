@@ -5,13 +5,10 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>fa221e52-612c-47dd-9021-0447da8056a7</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast</DockerServiceUrl>
-    <DockerServiceName>measuredwebapplication</DockerServiceName>
+    <DockerServiceUrl>http://localhost:3000</DockerServiceUrl>
+    <DockerServiceName>prometheus</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

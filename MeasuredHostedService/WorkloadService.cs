@@ -1,29 +1,35 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-internal class WorkloadService : BackgroundService
+namespace MeasuredHostedService
 {
-    private readonly ILogger<WorkloadService> logger;
-    private readonly DateTime started = DateTime.Now;
-    private readonly Int32 InstanceDelay = Random.Shared.Next(3000);
-
-    public WorkloadService(ILogger<WorkloadService> logger)
+    /// <summary>
+    /// Emulates memory load
+    /// </summary>
+    internal class WorkloadService : BackgroundService
     {
-        this.logger = logger;
-    }
+        private readonly ILogger<WorkloadService> logger;
+        private readonly DateTime started = DateTime.Now;
+        private readonly Int32 InstanceDelay = Random.Shared.Next(3000);
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        while (!stoppingToken.IsCancellationRequested)
+        public WorkloadService(ILogger<WorkloadService> logger)
         {
-            var x = ((DateTime.Now - started).TotalSeconds / Math.PI);
-            var y = 1024 * (3 + Math.Sin(x) + Math.Sin(x / 2) + Math.Sin(x * 2));
-            var size = (Int32)y;
-            var int32Array = new Int32[size];
+            this.logger = logger;
+        }
 
-            logger.LogInformation("Hello from {service}", nameof(WorkloadService));
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                var x = ((DateTime.Now - started).TotalSeconds / Math.PI);
+                var y = 1024 * (3 + Math.Sin(x) + Math.Sin(x / 2) + Math.Sin(x * 2));
+                var size = (Int32)y;
+                var int32Array = new Int32[size];
 
-            await Task.Delay(InstanceDelay, stoppingToken);
+                logger.LogInformation("Hello from {service}", nameof(WorkloadService));
+
+                await Task.Delay(InstanceDelay, stoppingToken);
+            }
         }
     }
 }

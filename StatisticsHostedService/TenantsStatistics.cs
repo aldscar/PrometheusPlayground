@@ -1,84 +1,58 @@
-﻿using System.Net.Http.Headers;
-using System.Text.Json;
-
-class TenantsStatistics
+﻿
+namespace StatisticsHostedService
 {
-    private Int32 numberOfCompanies = 5;
-
-    private TenantData[] tenants;
-
-    public async Task<TenantData[]> LoadTenantStatistics()
+    /// <summary>
+    /// Yields fake data
+    /// </summary>
+    class TenantsStatistics
     {
-        if (tenants == null)
+        private Int32 numberOfCompanies = 5;
+
+        private TenantData[] tenants;
+
+        public TenantsStatistics()
         {
-            tenants = await GetTenants(numberOfCompanies);
+            tenants = Enumerable.Range(0, numberOfCompanies)
+                .Select(x => new TenantData())
+                .ToArray();
         }
 
-        if (Random.Shared.Next(100) == 0)
+        public TenantData[] LoadTenantStatistics()
         {
-            var newCompanies = await GetTenants(1);
-            tenants = tenants.Concat(newCompanies).ToArray();
+            if (Random.Shared.Next(100) == 0)
+            {
+                tenants = tenants
+                    .Concat(new[] { new TenantData() })
+                    .ToArray();
+            }
+
+            static int getRandom() => Random.Shared.Next(5) - Random.Shared.Next(2);
+
+            foreach (var tenant in tenants)
+            {
+                tenant.DraftDocuments += getRandom();
+                if (tenant.DraftDocuments < 0) tenant.DraftDocuments = 0;
+
+                tenant.PublishedDocuments += getRandom();
+                if (tenant.PublishedDocuments < 0) tenant.PublishedDocuments = 0;
+
+                tenant.ApprovedDocuments += getRandom();
+                if (tenant.ApprovedDocuments < 0) tenant.ApprovedDocuments = 0;
+
+                tenant.ObsoleteDocuments += getRandom();
+                if (tenant.ObsoleteDocuments < 0) tenant.ObsoleteDocuments = 0;
+            }
+
+            return tenants;
         }
 
-        foreach (var tenant in tenants)
-            RefreshValues(tenant);
-
-        return tenants;
-    }
-
-    private void RefreshValues(TenantData tenant)
-    {
-        tenant.DraftDocuments += Random.Shared.Next(10);
-        tenant.DraftDocuments -= Random.Shared.Next(tenant.DraftDocuments);
-        if (tenant.DraftDocuments < 0) tenant.DraftDocuments = 0;
-
-        tenant.PublishedDocuments += Random.Shared.Next(5) - Random.Shared.Next(2);
-        if (tenant.PublishedDocuments < 0) tenant.PublishedDocuments = 0;
-
-        tenant.ApprovedDocuments += Random.Shared.Next(5) - Random.Shared.Next(2);
-        if (tenant.ApprovedDocuments < 0) tenant.ApprovedDocuments = 0;
-
-        tenant.ObsoleteDocuments += Random.Shared.Next(5) - Random.Shared.Next(2);
-        if (tenant.ObsoleteDocuments < 0) tenant.ObsoleteDocuments = 0;
-    }
-
-    private static async Task<TenantData[]?> GetTenants(Int32 size)
-    {
-        using var client = new HttpClient();
-
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-        var url = $"https://fakerapi.it/api/v1/custom?_quantity={size}&customfield1=company_name";
-        var response = await client.GetAsync(url);
-        if (response.IsSuccessStatusCode)
+        public class TenantData
         {
-
-            var unparsed = await response.Content.ReadAsStringAsync();
-            var parsed = JsonSerializer.Deserialize<FakeData>(unparsed);
-            return parsed.data.Select(x => new TenantData() { Name = x.customfield1 }).ToArray();
+            public String Name { get; set; } = Guid.NewGuid().ToString();
+            public Int32 DraftDocuments { get; set; }
+            public Int32 PublishedDocuments { get; set; }
+            public Int32 ApprovedDocuments { get; set; }
+            public Int32 ObsoleteDocuments { get; set; }
         }
-        return null;
-    }
-
-    private class FakeData
-    {
-        public class FakeCompany
-        {
-            public String customfield1 { get; set; }
-        }
-
-        public FakeCompany[] data { get; set; }
-    }
-
-    
-    public class TenantData
-    {
-        public String Name { get; set; }
-        public Int32 DraftDocuments { get; set; }
-        public Int32 PublishedDocuments { get; set; }
-        public Int32 ApprovedDocuments { get; set; }
-        public Int32 ObsoleteDocuments { get; set; }
     }
 }

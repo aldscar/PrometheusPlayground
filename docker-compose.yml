@@ -32,7 +32,9 @@ services:
       context: .
       dockerfile: MeasuredWebApplication/Dockerfile
     ports:
-      - "8080:80"
+      - "10080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
   
   measuredhostedservice-A:
     image: ${DOCKER_REGISTRY-}measuredhostedservice
@@ -41,7 +43,7 @@ services:
       context: .
       dockerfile: MeasuredHostedService/Dockerfile
     ports:
-      - "8081:80"
+      - "10081:80"
 
   measuredhostedservice-B:
     image: ${DOCKER_REGISTRY-}measuredhostedservice
@@ -50,7 +52,7 @@ services:
       context: .
       dockerfile: MeasuredHostedService/Dockerfile
     ports:
-      - "8082:80"
+      - "10082:80"
 
   measuredhostedservice-C:
     image: ${DOCKER_REGISTRY-}measuredhostedservice
@@ -59,7 +61,7 @@ services:
       context: .
       dockerfile: MeasuredHostedService/Dockerfile
     ports:
-      - "8083:80"
+      - "10083:80"
 
   statisticshostedservice:
     image: ${DOCKER_REGISTRY-}statisticshostedservice
@@ -68,4 +70,4 @@ services:
       context: .
       dockerfile: StatisticsHostedService/Dockerfile
     ports:
-      - "8084:80"
+      - "10084:80"
