@@ -4,20 +4,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
 using Serilog;
+using SharedClasses;
 
-namespace SharedClasses
+namespace MeasuredHostedService
 {
-    public class BaseHostedServiceStartup
+    public class Startup
     {
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedService<WorkloadService>();
+            services.AddRouting();
             services.AddHealthChecks()
                 .AddCheck<SampleHealthCheck>("AppHealthCheck")
                 .ForwardToPrometheus();
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {                      
             app.UseSerilogRequestLogging();
             app.UseMetricServer();
             app.UseRouting();
