@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{E78736C1-C
 		Grafana\Data\grafana.db = Grafana\Data\grafana.db
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeasuredWebApplication.Tests", "..\MeasuredWebApplication.Tests\MeasuredWebApplication.Tests.csproj", "{A27B7EAB-3780-4AF1-BEFA-6B61C325CD69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeasuredWebApplication.Tests", "PrometheusPlayground.Tests\MeasuredWebApplication.Tests.csproj", "{A95FCE9C-AFDE-40A7-B523-A9BF8081FDF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,10 +60,10 @@ Global
 		{6A2A7421-900D-4931-B4FA-B573DA3B33BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A2A7421-900D-4931-B4FA-B573DA3B33BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A2A7421-900D-4931-B4FA-B573DA3B33BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A27B7EAB-3780-4AF1-BEFA-6B61C325CD69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A27B7EAB-3780-4AF1-BEFA-6B61C325CD69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A27B7EAB-3780-4AF1-BEFA-6B61C325CD69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A27B7EAB-3780-4AF1-BEFA-6B61C325CD69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A95FCE9C-AFDE-40A7-B523-A9BF8081FDF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A95FCE9C-AFDE-40A7-B523-A9BF8081FDF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A95FCE9C-AFDE-40A7-B523-A9BF8081FDF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A95FCE9C-AFDE-40A7-B523-A9BF8081FDF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
