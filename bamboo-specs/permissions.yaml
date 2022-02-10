@@ -1,0 +1,15 @@
+---
+version: 2
+plan:
+  key: PROM-PROM
+plan-permissions:
+- users:
+  - bamboo
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - viewConfiguration
+...

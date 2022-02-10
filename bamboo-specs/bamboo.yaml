@@ -62,7 +62,7 @@ variables:
   Target: Any CPU
 repositories:
 - PrometheusPayloadGitHub:
-    scope: global
+    scope: project
 triggers:
 - polling:
     period: '180'
@@ -79,17 +79,4 @@ dependencies:
   plans: []
 other:
   concurrent-build-plugin: system-default
----
-version: 2
-plan:
-  key: PROM-PROM
-plan-permissions:
-- users:
-  - bamboo
-  permissions:
-  - view
-  - edit
-  - build
-  - clone
-  - admin
-...
+...  
