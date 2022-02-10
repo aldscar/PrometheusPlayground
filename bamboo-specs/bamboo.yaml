@@ -92,5 +92,5 @@ plan-permissions:
   - build
   - clone
   - admin
-  - view_configuration
+  - viewConfiguration
 ...
