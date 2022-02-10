@@ -9,21 +9,21 @@ stages:
     manual: false
     final: false
     jobs:
-    - Default Job
-Default Job:
+    - Build and Compile Job
+Build and Compile Job:
   key: JOB1
   tasks:
   - checkout:
       force-clean-build: 'false'
-      description: Checkout Default Repository
+      description: Checkout Project-level Repository
   - command:
       executable: dotnet
       argument: restore PrometheusPlayground.sln
-      description: Restore dotnet
+      description: Restore nuget packages used in the solution
   - command:
       executable: dotnet
       argument: publish /p:PublishRootDir=${bamboo.build.working.directory}/artifacts PrometheusPlayground.sln /p:Configuration="${bamboo.Configuration}" /p:target="${bamboo.Target}"
-      description: Build project
+      description: Build solution and publishing artifacts
   - script:
       interpreter: BINSH_OR_CMDEXE
       scripts:
@@ -31,15 +31,15 @@ Default Job:
         echo $PWD
         zip -r artifacts.zip artifacts
         ls -l
-      description: Zip artifacts
+      description: Archive project artifacts into zip file
   - command:
       executable: dotnet
       argument: test PrometheusPlayground.sln --logger "trx;LogFileName=testresults.trx"
-      description: Run tests
+      description: Run tests on the solution
   - command:
       executable: Code Coverage
       argument: inspectcode PrometheusPlayground.sln --severity=WARNING --build -o=inspectcode.xml --include=**/*.cs
-      description: Inspect code
+      description: Collect code issues 
   final-tasks:
   - any-task:
       plugin-key: com.atlassian.bamboo.plugin.dotnet:mstest
