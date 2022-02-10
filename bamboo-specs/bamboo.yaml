@@ -1,0 +1,96 @@
+---
+version: 2
+plan:
+  project-key: PROM
+  key: PROM
+  name: PrometheusBuildPlan
+stages:
+- Default Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job
+Default Job:
+  key: JOB1
+  tasks:
+  - checkout:
+      force-clean-build: 'false'
+      description: Checkout Default Repository
+  - command:
+      executable: dotnet
+      argument: restore PrometheusPlayground.sln
+      description: Restore dotnet
+  - command:
+      executable: dotnet
+      argument: publish /p:PublishRootDir=${bamboo.build.working.directory}/artifacts PrometheusPlayground.sln /p:Configuration="${bamboo.Configuration}" /p:target="${bamboo.Target}"
+      description: Build project
+  - script:
+      interpreter: BINSH_OR_CMDEXE
+      scripts:
+      - |-
+        echo $PWD
+        zip -r artifacts.zip artifacts
+        ls -l
+      description: Zip artifacts
+  - command:
+      executable: dotnet
+      argument: test PrometheusPlayground.sln --logger "trx;LogFileName=testresults.trx"
+      description: Run tests
+  - command:
+      executable: Code Coverage
+      argument: inspectcode PrometheusPlayground.sln --severity=WARNING --build -o=inspectcode.xml --include=**/*.cs
+      description: Inspect code
+  final-tasks:
+  - any-task:
+      plugin-key: com.atlassian.bamboo.plugin.dotnet:mstest
+      configuration:
+        mstestTestResultsDirectory: '**/*.trx'
+        pickupOutdatedFiles: 'false'
+      description: Parse test results
+  artifacts:
+  - name: Binaries
+    pattern: artifacts.zip
+    shared: true
+    required: true
+  - name: Code Inspection
+    pattern: inspectcode.xml
+    shared: true
+    required: true
+  artifact-subscriptions: []
+variables:
+  Configuration: Release
+  Target: Any CPU
+repositories:
+- PrometheusPayloadGitHub:
+    scope: global
+triggers:
+- polling:
+    period: '180'
+branches:
+  create: manually
+  delete: never
+  link-to-jira: true
+notifications: []
+labels: []
+dependencies:
+  require-all-stages-passing: false
+  enabled-for-branches: true
+  block-strategy: none
+  plans: []
+other:
+  concurrent-build-plugin: system-default
+---
+version: 2
+plan:
+  key: PROM-PROM
+plan-permissions:
+- users:
+  - bamboo
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - view_configuration
+...
